@@ -23,11 +23,11 @@
   "types": "./build/src/supabase-replication.d.ts",
   "license": "MIT",
   "engines": {
-    "node": "^18.15.0",
+    "node": "^20.0.0",
     "npm": "^10.8.0"
   },
   "volta": {
-    "node": "18.15.0",
+    "node": "^20.0.0",
     "npm": "^10.8.0"
   },
   "publishConfig": {
@@ -81,5 +81,10 @@
     "tsx": "^3.12.7",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"
+  },
+  "overrides": {
+    "rxdb": {
+      "ws": "^8.17.1"
+    }
   }
 }
