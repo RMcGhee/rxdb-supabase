@@ -168,7 +168,7 @@ export class SupabaseReplication<RxDocType> extends RxReplicationState<
    * Pulls all changes since the last checkpoint from supabase.
    */
   private async pullHandler(
-    lastCheckpoint: SupabaseReplicationCheckpoint,
+    lastCheckpoint: SupabaseReplicationCheckpoint | undefined,
     batchSize: number,
   ): Promise<ReplicationPullHandlerResult<RxDocType, SupabaseReplicationCheckpoint>> {
     let query = this.options.supabaseClient.from(this.table).select()
@@ -188,7 +188,7 @@ export class SupabaseReplication<RxDocType> extends RxReplicationState<
     if (error) throw error
     if (data.length == 0) {
       return {
-        checkpoint: lastCheckpoint,
+        checkpoint: lastCheckpoint ?? null,
         documents: [],
       }
     } else {
@@ -267,7 +267,7 @@ export class SupabaseReplication<RxDocType> extends RxReplicationState<
 
   private watchPostgresChanges() {
     this.realtimeChannel = this.options.supabaseClient
-      .channel(`rxdb-supabase-${this.replicationIdentifierHash}`)
+      .channel(`rxdb-supabase-${this.replicationIdentifier}`)
       .on("postgres_changes", { event: "*", schema: "public", table: this.table }, (payload) => {
         if (payload.eventType === "DELETE" || !payload.new) return // Should have set _deleted field already
         //console.debug('Realtime event received:', payload)
